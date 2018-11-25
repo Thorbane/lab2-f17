@@ -70,6 +70,7 @@ exec(char *path, char **argv)
   // Part 4 of help file
 //  sz = PGROUNDUP(sz);                                  //outdated
 //  if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)   //outdated
+
   stk_sz = PGROUNDDOWN(KERNBASE - 4);
   sp = stk_sz;
   if((stk_sz = allocuvm(pgdir, stk_sz - 1*PGSIZE, stk_sz)) == 0)
