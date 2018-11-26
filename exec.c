@@ -71,9 +71,9 @@ exec(char *path, char **argv)
 //  sz = PGROUNDUP(sz);                                  //outdated
 //  if((sz = allocuvm(pgdir, sz, sz + 2*PGSIZE)) == 0)   //outdated
 
-  stk_sz = PGROUNDDOWN(KERNBASE - 4);
-  sp = stk_sz;
-  if((stk_sz = allocuvm(pgdir, stk_sz - 1*PGSIZE, stk_sz)) == 0)
+  stk_sz = 1;
+  sp = (KERNBASE - 4 - PGSIZE);
+  if(allocuvm(pgdir, KERNBASE - PGSIZE*2, KERNBASE-PGSIZE) == 0)
     goto bad;
 
   // Push argument strings, prepare rest of stack in ustack.
@@ -105,6 +105,7 @@ exec(char *path, char **argv)
   oldpgdir = curproc->pgdir;
   curproc->pgdir = pgdir;
   curproc->sz = sz;
+  curproc->stk_sz = stk_sz;
   curproc->tf->eip = elf.entry;  // main
   curproc->tf->esp = sp;
   switchuvm(curproc);
